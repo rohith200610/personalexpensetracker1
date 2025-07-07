@@ -1,0 +1,179 @@
+
+
+  
+
+<!-- Monthly Summary Table with Edit Button -->
+<div style="display: flex; align-items: center; margin-bottom: 4px;">
+  <h2 style="margin: 0;">🗓️ Monthly Summary</h2>
+  <button style="margin-left: 12px;" *ngIf="!editSummary" (click)="onEdit('summary')">✏️ Edit</button>
+</div>
+<table border="1" style="width:100%; text-align:left;">
+  <tr>
+    <th>Total Income</th>
+    <th>Total Expense</th>
+    <th>Remaining</th>
+    
+  </tr>
+  <tr *ngIf="!editSummary">
+    <td>₹ {{ summary.totalIncome | number }}</td>
+    <td>₹ {{ summary.totalExpense | number }}</td>
+    <td>₹ {{ summary.remaining | number }}</td>
+    
+  </tr>
+  <tr *ngIf="editSummary">
+    <td><input [(ngModel)]="tempSummary.totalIncome" type="number" /></td>
+    <td><input [(ngModel)]="tempSummary.totalExpense" type="number" /></td>
+    <td><input [(ngModel)]="tempSummary.remaining" type="number" /></td>
+    <td><input [(ngModel)]="tempSummary.budget" type="number" /></td>
+  </tr>
+</table>
+<div *ngIf="editSummary" style="margin-top: 8px;">
+  <button (click)="onSaveSummary()">Save</button>
+  <button (click)="onCancelSummary()" style="margin-left: 8px;">Cancel</button>
+</div>
+
+<!-- Spending Overview Table with Edit Button -->
+<div style="display: flex; align-items: center; margin-bottom: 4px; margin-top: 16px;">
+  <h3 style="margin: 0;">📈 Spending Overview:</h3>
+  <button style="margin-left: 12px;" *ngIf="!editSpending" (click)="onEdit('spending')">✏️ Edit</button>
+</div>
+<table border="1" style="width: 50%; text-align: left;">
+  <tr>
+    <th>Category</th>
+    <th>Percentage</th>
+  </tr>
+  <tr *ngFor="let item of editSpending ? tempSpending : spending; let i = index">
+    <td>
+      <ng-container *ngIf="editSpending; else showCategory">
+        <input [(ngModel)]="tempSpending[i].category" />
+      </ng-container>
+      <ng-template #showCategory>{{item.category}}</ng-template>
+    </td>
+    <td>
+      <ng-container *ngIf="editSpending; else showPercent">
+        <input type="number" [(ngModel)]="tempSpending[i].percentage" style="width: 60px;" />%
+      </ng-container>
+      <ng-template #showPercent>{{item.percentage}}%</ng-template>
+    </td>
+  </tr>
+</table>
+<div *ngIf="editSpending" style="margin-top: 8px;">
+  <button (click)="onSaveSpending()">Save</button>
+  <button (click)="onCancelSpending()" style="margin-left: 8px;">Cancel</button>
+</div>
+
+<!-- Bar Chart Table with Edit Button -->
+<div style="display: flex; align-items: center; margin-bottom: 4px; margin-top: 16px;">
+  <h3 style="margin: 0;">📅 Monthly Summary:</h3>
+  <button style="margin-left: 12px;" *ngIf="!editBar" (click)="onEdit('bar')">✏️ Edit</button>
+</div>
+<table border="1" style="width: 60%; text-align: left;">
+  <tr>
+    <th *ngFor="let month of barMonths">{{month}}</th>
+  </tr>
+  <tr>
+    <td *ngFor="let value of editBar ? tempBarValues : barValues; let i = index">
+      <ng-container *ngIf="editBar; else showBarValue">
+        <input type="number" [(ngModel)]="tempBarValues[i]" style="width: 60px;" />
+      </ng-container>
+      <ng-template #showBarValue>₹{{value >= 1000 ? (value/1000)+'k' : value}}</ng-template>
+    </td>
+  </tr>
+</table>
+<div *ngIf="editBar" style="margin-top: 8px;">
+  <button (click)="onSaveBar()">Save</button>
+  <button (click)="onCancelBar()" style="margin-left: 8px;">Cancel</button>
+</div>
+
+<!-- Add/Search Controls -->
+<div style="margin-top: 16px;">
+  <input [(ngModel)]="searchText" placeholder="Search..." style="margin-left: 16px;" />
+  <button (click)="onSearch()" style="margin-left: 16px;">🔍 [Search]</button>
+  <button (click)="onAddExpense()" style="margin-left: 16px;">➕ [Add New Expense]</button>
+</div>
+
+<!-- Add Expense Form (inline) -->
+<div *ngIf="showAddExpenseForm" style="border: 1px solid #888; border-radius: 8px; padding: 16px; margin: 16px 0; background: #222; color: #fff;">
+  <h3>Add New Expense</h3>
+  <form (ngSubmit)="onSaveNewExpense()">
+    <div style="margin-bottom: 8px;">
+      Title: <input [(ngModel)]="newExpense.title" name="title" required />
+    </div>
+    <div style="margin-bottom: 8px;">
+      Amount: <input type="number" [(ngModel)]="newExpense.amount" name="amount" required />
+    </div>
+    <div style="margin-bottom: 8px;">
+      Date: <input type="date" [(ngModel)]="newExpense.date" name="date" required />
+    </div>
+    <div style="margin-bottom: 8px;">
+      Category:
+      <select [(ngModel)]="newExpense.category" name="category" required>
+        <option value="">Select</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+      </select>
+    </div>
+    <div style="margin-bottom: 8px;">
+      Type:
+      <select [(ngModel)]="newExpense.type" name="type" required>
+        <option *ngFor="let t of types" [value]="t">{{t}}</option>
+      </select>
+    </div>
+    <button type="submit">Save Expense</button>
+    <button type="button" (click)="onCancelNewExpense()" style="margin-left: 8px;">Cancel</button>
+  </form>
+</div>
+
+<!-- Expense List Table with Edit Button -->
+<div style="display: flex; align-items: center; margin-bottom: 4px; margin-top: 16px;">
+  <h3 style="margin: 0;">🗒️ Expense List:</h3>
+  <button style="margin-left: 12px;" *ngIf="!editExpenses" (click)="onEdit('expenseList')">✏️ Edit</button>
+</div>
+<table border="1" style="width: 100%; text-align: left;">
+  <tr>
+    <th>| Title</th>
+    <th>| ₹ Amount</th>
+    <th>| 📅 Date</th>
+    <th>| 🏷️ Category</th>
+    <th>| 🔄 Type |</th>
+  </tr>
+  <tr *ngFor="let item of editExpenses ? tempExpenses : filteredExpenses; let i = index">
+    <td>
+      <ng-container *ngIf="editExpenses; else showTitle">
+        <input [(ngModel)]="tempExpenses[i].title" />
+      </ng-container>
+      <ng-template #showTitle>| {{item.title}}</ng-template>
+    </td>
+    <td>
+      <ng-container *ngIf="editExpenses; else showAmount">
+        <input type="number" [(ngModel)]="tempExpenses[i].amount" style="width: 80px;" />
+      </ng-container>
+      <ng-template #showAmount>| ₹{{item.amount | number}}</ng-template>
+    </td>
+    <td>
+      <ng-container *ngIf="editExpenses; else showDate">
+        <input type="date" [(ngModel)]="tempExpenses[i].date" />
+      </ng-container>
+      <ng-template #showDate>| {{item.date | date:'dd MMM yyyy'}}</ng-template>
+    </td>
+    <td>
+      <ng-container *ngIf="editExpenses; else showCat">
+        <input [(ngModel)]="tempExpenses[i].category" />
+      </ng-container>
+      <ng-template #showCat>| {{item.category}}</ng-template>
+    </td>
+    <td>
+      <ng-container *ngIf="editExpenses; else showType">
+        <select [(ngModel)]="tempExpenses[i].type">
+          <option>Income</option>
+          <option>Expense</option>
+        </select>
+      </ng-container>
+      <ng-template #showType>| {{item.type}} |</ng-template>
+    </td>
+  </tr>
+</table>
+<div *ngIf="editExpenses" style="margin-top: 8px;">
+  <button (click)="onSaveExpenses()">Save</button>
+  <button (click)="onCancelExpenses()" style="margin-left: 8px;">Cancel</button>
+</div>
+
