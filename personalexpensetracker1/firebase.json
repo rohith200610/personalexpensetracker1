@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/personal-expense-tracker",
+    "public": "dist/personal-expense-tracker/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
