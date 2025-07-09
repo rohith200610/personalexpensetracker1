@@ -1,0 +1,21 @@
+<p>dash-board works!</p>
+<div class="container">
+    <form #userData="ngForm" (ngSubmit)="saveData(userData)" class="d-flex flex-column gap-3 col-4">
+        <input type="text" placeholder="Enter First Name" [(ngModel)]="user.firstName" name="firstName" required #nameInput="ngModel"/>
+        <p class="text-danger" *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)">Required</p>
+
+        <input type="text" placeholder="Enter Last Name" [(ngModel)]="user.lastName" name="lastName"/>
+
+        <input type="email" placeholder="Enter Your email" [(ngModel)]="user.email" name="email" required #emailInput="ngModel"/>
+        <p class="text-danger" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">Required</p>
+
+        <input type="Number" placeholder="Enter Your Age" [(ngModel)]="user.age" name="age"/>
+
+        <div>
+            <button [disabled]="userData.invalid" class="btn btn-success" type="submit">Submit</button>
+        </div>
+    </form>
+
+
+    
+</div>

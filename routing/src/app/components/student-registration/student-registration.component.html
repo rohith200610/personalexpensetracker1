@@ -1,0 +1,22 @@
+<div class="container">
+
+    <form [formGroup]="studentForm" >
+
+        <input type="text" placeholder="First Name" formControlName="firstName" required/>
+        <br>
+
+        <input type="text" placeholder="Last Name" formControlName="lastName" required/>
+        <br>
+
+        <input type="email" placeholder="Email" formControlName="email" required/>
+        <br>
+
+        <input type="text" placeholder="Age" formControlName="age" required/>
+        <br>
+
+        <!-- Add a submit button to complete the form -->
+        <button type="submit" class="btn btn-success">Register</button>
+
+    </form>
+
+</div>

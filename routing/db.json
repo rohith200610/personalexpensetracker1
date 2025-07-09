@@ -1,0 +1,11 @@
+{
+  "students": [
+    {
+      "firstName": 1,
+      "lastName": "Alice",
+      "age": 20,
+      "eamil": "Computer Science"
+    }
+   
+  ]
+}
